@@ -18,7 +18,7 @@ router.put('/event', async (req, res) => {
 		res.end();
 	} catch (error) {
 		res.status(500);
-		res	.send({ error });
+		res.send({ error });
 	}
 });
 
