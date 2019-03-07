@@ -4,8 +4,18 @@ const { getCleanObj } = require('../utils/objUtils');
 
 router.get('/', async (req, res) => {
 	try {
-		const collection = await req.db.get('events').find({});
-		res.json(collection);
+		const documents = await req.db.get('events').find({});
+		res.json(documents);
+	} catch (e) {
+		res.status(500);
+		res.send({ error });
+	}
+});
+
+router.get('/meta', async (req, res) => {
+	try {
+		const documents = await req.db.get('eventData').find({});
+		res.json(documents);
 	} catch (e) {
 		res.status(500);
 		res	.send({ error });
