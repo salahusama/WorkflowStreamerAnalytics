@@ -6,6 +6,7 @@ const logger = require('morgan');
 const eventsRouter = require('./routes/events');
 const usersRouter = require('./routes/users');
 const mongodb = require('mongodb');
+const cors = require('cors');
 
 const app = express();
 
@@ -23,6 +24,7 @@ mongoClient.connect((err) => {
   }
 });
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
