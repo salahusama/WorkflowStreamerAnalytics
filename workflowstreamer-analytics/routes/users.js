@@ -4,7 +4,8 @@ const router = express.Router()
 router.get('/:userId/options', async (req, res) => {
 	const userId = parseInt(req.params.userId)
 	try {
-		const result = await req.db.get('options').findOne({ userId: parseInt(userId) }, { options: 1, _id: 0 })
+		const db = req.app.get('db');
+		const result = await db.collection('options').findOne({ userId: parseInt(userId) }, { options: 1, _id: 0 });
 		res.json(result.options)
 	} catch (error) {
 		res.status(500)
@@ -15,11 +16,13 @@ router.get('/:userId/options', async (req, res) => {
 router.put('/:userId/options', async (req, res) => {
 	const userId = parseInt(req.params.userId)
 	try {
-		await req.db.get('options').update({ userId }, {
+		const db = req.app.get('db');
+		const options = await db.collection('options');
+		await options.updateOne({ userId }, {
 			userId,
 			options: req.body,
 		})
-		const result = await req.db.get('options').findOne({ userId: parseInt(userId) }, { options: 1, _id: 0 })
+		const result = await options.findOne({ userId: parseInt(userId) }, { options: 1, _id: 0 })
 		res.json(result.options)
 	} catch (error) {
 		res.status(500)

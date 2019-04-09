@@ -4,27 +4,20 @@ const { getCleanObj } = require('../utils/objUtils');
 
 router.get('/', async (req, res) => {
 	try {
-		const documents = await req.db.get('events').find({});
-		res.json(documents);
+		const db = req.app.get('db');
+		const events = await db.collection('events').find({}).toArray();
+		res.json(events);
 	} catch (e) {
 		res.status(500);
 		res.send({ error });
 	}
 });
 
-router.get('/meta', async (req, res) => {
-	try {
-		const documents = await req.db.get('eventData').find({});
-		res.json(documents);
-	} catch (e) {
-		res.status(500);
-		res	.send({ error });
-	}
-});
-
 router.put('/event', async (req, res) => {
 	try {
-		await req.db.get('events').insert(getCleanObj(req.body));
+		const db = req.app.get('db');
+		const eventsCollection = await db.collection('events');
+		await eventsCollection.insertOne(getCleanObj(req.body));
 		res.end();
 	} catch (error) {
 		res.status(500);
